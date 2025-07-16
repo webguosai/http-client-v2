@@ -1,0 +1,33 @@
+{
+    "name": "webguosai/http-client-v2",
+    "description": "http客户端",
+    "keywords": ["http", "httpclient", "guzzle"],
+    "support": {
+        "issues": "https://github.com/webguosai/http-client-v2/issues",
+        "source": "https://github.com/webguosai/http-client-v2"
+    },
+    "authors": [
+        {
+            "name": "webguosai",
+            "email": "501807312@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "ext-openssl": "*",
+        "ext-json": "*",
+        "ext-curl": "*",
+        "ext-libxml": "*",
+        "ext-simplexml": "*",
+        "ext-iconv": "*"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^3.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webguosai\\HttpClient\\": "src"
+        }
+    },
+    "license": "MIT"
+}
