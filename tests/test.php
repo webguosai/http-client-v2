@@ -17,15 +17,15 @@ $data   = json_encode(['a' => 111]);
 // $method = 'PATCH';
 // $data   = json_encode(['a' => 111]);
 
-// $http = (new \Webguosai\HttpClient\HttpClient([
-//     'timeout' => 5,
-//     // 'proxy' => '127.0.0.1:9527'
-// ]));
-
-$http     = \Webguosai\HttpClient\HttpClient::factory([
-    'timeout' => 1,
+$http = (new \Webguosai\HttpClient\HttpClient([
+    'timeout' => 5,
     // 'proxy' => '127.0.0.1:9527'
-]);
+]));
+
+// $http     = \Webguosai\HttpClient\HttpClient::factory([
+//     'timeout' => 1,
+//     // 'proxy' => '127.0.0.1:9527'
+// ]);
 
 $response = $http->request(
     $url,
