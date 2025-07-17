@@ -22,7 +22,7 @@ composer require webguosai/http-client-v2 -vvv
 ### 初始化
 ```php
 $options = [
-    //超时(单位秒)
+    //超时(单位秒，-1表示不超时)
     'timeout'     => 3,
 
     //代理ip
@@ -77,7 +77,7 @@ $response->getStatusCode(); // http状态码
 $response->getInfo(); // 其它信息
 $response->json(); // json
 $response->xml(); // xml
-$response->ok();// curl_code = 0 && http_code = 200 返回真
+$response->ok();// curl_code = 0 && http_code = 200
 $response->getCurlErrorCode(); // 错误信息
 ```
 
@@ -124,7 +124,7 @@ $http = \Webguosai\HttpClient\HttpClient::factory([
 ])
 $response = $http->get('http://www.baidu.com');
 
-/** @var $throw \Webguosai\HttpClient\Exception\RequestException **/
+/** @var $throw \Webguosai\HttpClient\Exception\RequestException */
 [$status, $throw] = $response->ok();
 if ($status) {
     var_dump($response->getBody());
@@ -133,6 +133,7 @@ if ($status) {
     var_dump($throw->getMessage());
     var_dump($throw->getErrorType());
     var_dump($throw->getCode());
+    var_dump($e->getRequestArgs());
 }
 ```
 

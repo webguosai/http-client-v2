@@ -47,8 +47,9 @@ if ($status) {
     dump($response->getInfo());
 } else {
     dump($throw->getMessage());
-    dump($throw->getErrorType());
-    dump($throw->getCode());
+    // dump($throw->getErrorType());
+    // dump($throw->getCode());
+    // dump($throw->getRequestArgs());
 }
 
 // try {

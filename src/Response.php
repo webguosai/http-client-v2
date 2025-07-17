@@ -40,7 +40,9 @@ class Response
         $this->requestHeaders = $requestHeaders;
         $this->requestArgs    = $requestArgs;
 
-        list($this->headers, $this->body) = explode("\r\n\r\n", $response, 2);
+        $headerSize    = $info['header_size'] ?? 0;
+        $this->headers = substr($response, 0, $headerSize);
+        $this->body    = substr($response, $headerSize, strlen($response));
     }
 
     /**
