@@ -75,6 +75,7 @@ $response->getHeaders(); // 响应头
 $response->getBody(); // body
 $response->getStatusCode(); // http状态码
 $response->getInfo(); // 其它信息
+$response->getResponse(); // 获取响应的报文信息(包含header头、body)
 $response->json(); // json
 $response->xml(); // xml
 $response->ok();// curl_code = 0 && http_code = 200

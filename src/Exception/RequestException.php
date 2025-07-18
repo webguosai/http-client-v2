@@ -12,10 +12,12 @@ class RequestException extends RuntimeException
 {
     protected $errorType;
     protected $requestArgs;
+    protected $response;
 
-    public function __construct(int $code = 0, array $requestArgs = [])
+    public function __construct(int $code = 0, array $requestArgs = [], string $response = '')
     {
         $this->requestArgs = $requestArgs;
+        $this->response    = $response;
         parent::__construct($this->getErrorMsg($code), $code);
     }
 
@@ -26,6 +28,22 @@ class RequestException extends RuntimeException
     public function getRequestArgs(): array
     {
         return $this->requestArgs;
+    }
+
+    /**
+     * 获取上下文 信息
+     * @return array
+     */
+    public function getContext(): array
+    {
+        return [
+            // 传参
+            'args'          => $this->getRequestArgs(),
+            // 信息(错误信息)
+            'error_message' => $this->getMessage(),
+            // 响应内容(包含header头和body)
+            'response'      => $this->response,
+        ];
     }
 
     /**

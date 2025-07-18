@@ -125,6 +125,15 @@ class Response
     }
 
     /**
+     * 获取响应内容
+     * @return string
+     */
+    public function getResponse(): string
+    {
+        return $this->response;
+    }
+
+    /**
      * curl=0、且http状态=200表示成功
      * @return array
      */
@@ -144,7 +153,7 @@ class Response
         /** curl **/
         $errorCode = $this->getCurlErrorCode();
         if ($errorCode !== 0) {
-            throw new CurlException($errorCode, $this->getRequestArgs());
+            throw new CurlException($errorCode, $this->getRequestArgs(), $this->response);
         }
 
         /** http **/
@@ -157,22 +166,22 @@ class Response
         if ($level === 4) {
             // 4xx
             if ($statusCode === 401) {
-                throw new UnauthorizedException($statusCode, $this->getRequestArgs());
+                throw new UnauthorizedException($statusCode, $this->getRequestArgs(), $this->response);
             }
             if ($statusCode === 404) {
-                throw new NotFoundException($statusCode, $this->getRequestArgs());
+                throw new NotFoundException($statusCode, $this->getRequestArgs(), $this->response);
             }
             if ($statusCode === 429) {
-                throw new TooManyRequestsException($statusCode, $this->getRequestArgs());
+                throw new TooManyRequestsException($statusCode, $this->getRequestArgs(), $this->response);
             }
-            throw new ClientException($statusCode, $this->getRequestArgs());
+            throw new ClientException($statusCode, $this->getRequestArgs(), $this->response);
         } elseif ($level === 5) {
             // 5xx
-            throw new ServerException($statusCode, $this->getRequestArgs());
+            throw new ServerException($statusCode, $this->getRequestArgs(), $this->response);
         }
 
         // other
-        throw new HttpException($statusCode, $this->getRequestArgs());
+        throw new HttpException($statusCode, $this->getRequestArgs(), $this->response);
     }
 
     /**

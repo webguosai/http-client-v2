@@ -45,11 +45,13 @@ if ($status) {
     dump($response->getHeaders());
     dump($response->getRequestHeaders());
     dump($response->getInfo());
+    dump($response->getResponse());
 } else {
     dump($throw->getMessage());
     // dump($throw->getErrorType());
     // dump($throw->getCode());
     // dump($throw->getRequestArgs());
+    dump($throw->getContext());
 }
 
 // try {
