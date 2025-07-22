@@ -9,6 +9,7 @@ require_once '../vendor/autoload.php';
 
 /** post **/
 $url    = 'https://httpbin.org/post';
+$url    = 'https://google.com';
 $method = 'POST';
 $data   = json_encode(['a' => 111]);
 
@@ -17,15 +18,15 @@ $data   = json_encode(['a' => 111]);
 // $method = 'PATCH';
 // $data   = json_encode(['a' => 111]);
 
-$http = (new \Webguosai\HttpClient\HttpClient([
-    'timeout' => 5,
-    // 'proxy' => '127.0.0.1:9527'
-]));
-
-// $http     = \Webguosai\HttpClient\HttpClient::factory([
-//     'timeout' => 1,
+// $http = (new \Webguosai\HttpClient\HttpClient([
+//     'timeout' => 5,
 //     // 'proxy' => '127.0.0.1:9527'
-// ]);
+// ]));
+
+$http     = \Webguosai\HttpClient\HttpClient::factory([
+    'timeout' => 1,
+    // 'proxy' => '127.0.0.1:9527'
+])->timeout(1.5);
 
 $response = $http->request(
     $url,

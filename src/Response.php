@@ -2,7 +2,6 @@
 
 namespace Webguosai\HttpClient;
 
-use Webguosai\HttpClient\Consts\Consts;
 use Webguosai\HttpClient\Exception\ClientException;
 use Webguosai\HttpClient\Exception\CurlException;
 use Webguosai\HttpClient\Exception\HttpException;
@@ -148,6 +147,10 @@ class Response
         return [true, null];
     }
 
+    /**
+     * 抛出异常
+     * @return void
+     */
     public function throw()
     {
         /** curl **/

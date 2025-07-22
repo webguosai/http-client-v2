@@ -72,6 +72,17 @@ class HttpClient implements HttpClientInterface
     }
 
     /**
+     * 设置超时
+     * @param int|float $timeout 超时时间(秒,-1表示不超时)
+     * @return $this
+     */
+    public function timeout($timeout): self
+    {
+        $this->options['timeout'] = $timeout;
+        return $this;
+    }
+
+    /**
      * 请求
      * @param string $url
      * @param string $method
