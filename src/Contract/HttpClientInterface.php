@@ -13,6 +13,7 @@ use Webguosai\HttpClient\Response;
  * @method Response delete(string $url, string|array $data = [], string|array $headers = [])
  * @method Response head(string $url, string|array $data = [], string|array $headers = [])
  * @method Response options(string $url, string|array $data = [], string|array $headers = [])
+ * @method self timeout(int|float $timeout)
  */
 interface HttpClientInterface
 {
