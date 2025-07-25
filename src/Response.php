@@ -100,6 +100,10 @@ class Response
         return $this->requestHeaders;
     }
 
+    /**
+     * 获取请求前参数
+     * @return array
+     */
     public function getRequestArgs(): array
     {
         return $this->requestArgs;

@@ -3,15 +3,15 @@
 require_once '../vendor/autoload.php';
 
 /** get **/
-// $url    = 'https://httpbin.org/get?a=aaa&b=bbb';
-// $method = 'GET';
-// $data   = ['a' => 111];
+$url    = 'https://httpbin.org/get?a=aaa&b=bbb';
+$method = 'GET';
+$data   = ['a' => 111];
 
 /** post **/
-$url    = 'https://httpbin.org/post';
-$url    = 'https://google.com';
-$method = 'POST';
-$data   = json_encode(['a' => 111]);
+// $url    = 'https://httpbin.org/post';
+// // $url    = 'https://google.com';
+// $method = 'POST';
+// $data   = json_encode(['a' => 111]);
 
 /** patch **/
 // $url    = 'https://httpbin.org/patch';

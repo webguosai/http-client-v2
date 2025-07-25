@@ -26,7 +26,7 @@ class HttpClient implements HttpClientInterface
         'timeout'       => 3,
 
         // 代理
-        'proxySocks5'  => false, // 是否使用 socks5
+        'proxySocks5'   => false, // 是否使用 socks5
         'proxy'         => '', // 代理ip，如：0.0.0.0:8888
 
         // 允许重定向及重定向次数
@@ -99,7 +99,10 @@ class HttpClient implements HttpClientInterface
         $this->requestHeaders = [];
 
         // 根据 data 来设置对应的content-type请求头
-        $url = $this->transition($url, $method, $data);
+        $this->setContentTypeByData($data);
+
+        // 处理 url 和 data
+        [$url, $data] = $this->handleUrlData($url, $method, $data);
 
         $ch = curl_init();
 
@@ -168,13 +171,34 @@ class HttpClient implements HttpClientInterface
     }
 
     /**
-     * 根据 data 来转换 文档类型
+     * 根据 data 判断使用哪种 content-type
+     * @param mixed $data
+     * @return void
+     */
+    protected function setContentTypeByData($data): void
+    {
+        // 根据data类型来设置请求的content-type
+        if (is_string($data)) {
+            if (!is_null(json_decode($data))) {
+                $this->setContentType('application/json');
+            } else {
+                $this->setContentType('application/x-www-form-urlencoded');
+            }
+        } elseif (is_array($data)) {
+            $this->setContentType('multipart/form-data');
+        } else {
+            $this->setContentType('text/plain');
+        }
+    }
+
+    /**
+     * 处理 url 和 data
      * @param string $url
      * @param string $method
-     * @param mixed $data
-     * @return string
+     * @param $data
+     * @return array
      */
-    protected function transition(string $url, string $method, $data): string
+    protected function handleUrlData(string $url, string $method, $data): array
     {
         if ($method === 'GET') {
             /** 拼接 GET 请求中的 query 参数到url中 **/
@@ -189,22 +213,11 @@ class HttpClient implements HttpClientInterface
                     $url .= '&' . http_build_query($data);
                 }
             }
-        } else {
-            // 根据data类型来设置请求的content-type
-            if (is_string($data)) {
-                if (!is_null(json_decode($data))) {
-                    $this->setContentType('application/json');
-                } else {
-                    $this->setContentType('application/x-www-form-urlencoded');
-                }
-            } elseif (is_array($data)) {
-                $this->setContentType('multipart/form-data');
-            } else {
-                $this->setContentType('text/plain');
-            }
+
+            $data = [];
         }
 
-        return $url;
+        return [$url, $data];
     }
 
     /**
