@@ -2,6 +2,7 @@
 
 namespace Webguosai\HttpClient;
 
+use Webguosai\HttpClient\Contract\ResponseInterface;
 use Webguosai\HttpClient\Exception\ClientException;
 use Webguosai\HttpClient\Exception\CurlException;
 use Webguosai\HttpClient\Exception\HttpException;
@@ -12,7 +13,7 @@ use Webguosai\HttpClient\Exception\TooManyRequestsException;
 use Webguosai\HttpClient\Exception\UnauthorizedException;
 use function floor;
 
-class Response
+class Response implements ResponseInterface
 {
     protected $response;
     protected $info;
@@ -166,7 +167,7 @@ class Response
         /** curl **/
         $errorCode = $this->getCurlErrorCode();
         if ($errorCode !== 0) {
-            throw new CurlException($errorCode, $this->getRequestArgs(), $this->getResponse());
+            throw new CurlException($errorCode, $this);
         }
 
         /** http **/
@@ -179,22 +180,22 @@ class Response
         if ($level === 4) {
             // 4xx
             if ($statusCode === 401) {
-                throw new UnauthorizedException($statusCode, $this->getRequestArgs(), $this->getResponse());
+                throw new UnauthorizedException($statusCode, $this);
             }
             if ($statusCode === 404) {
-                throw new NotFoundException($statusCode, $this->getRequestArgs(), $this->getResponse());
+                throw new NotFoundException($statusCode, $this);
             }
             if ($statusCode === 429) {
-                throw new TooManyRequestsException($statusCode, $this->getRequestArgs(), $this->getResponse());
+                throw new TooManyRequestsException($statusCode, $this);
             }
-            throw new ClientException($statusCode, $this->getRequestArgs(), $this->getResponse());
+            throw new ClientException($statusCode, $this);
         } elseif ($level === 5) {
             // 5xx
-            throw new ServerException($statusCode, $this->getRequestArgs(), $this->getResponse());
+            throw new ServerException($statusCode, $this);
         }
 
         // other
-        throw new HttpException($statusCode, $this->getRequestArgs(), $this->getResponse());
+        throw new HttpException($statusCode, $this);
     }
 
     /**

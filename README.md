@@ -127,6 +127,12 @@ $response = $http->get('http://www.baidu.com');
 
 /** @var $throw \Webguosai\HttpClient\Exception\RequestException */
 [$status, $throw] = $response->ok();
+// 自定义异常错误
+// [$status, $throw] = $response->ok(function (\Webguosai\HttpClient\Contract\ResponseInterface $response) {
+//     if ($response->getBody() !== 'hello world') {
+//         throw new \Webguosai\HttpClient\Exception\RequestException('自定义异常错误', $response);
+//     }
+// });
 if ($status) {
     var_dump($response->getBody()); // body
     var_dump($response->json());
@@ -148,9 +154,9 @@ try {
     $response->throw();
     var_dump($response->json());
     
-    // 自定义错误
+    // 自定义异常错误
     if ($response->getBody() !== 'hello world') {
-        throw new \Webguosai\HttpClient\Exception\RequestException('自定义错误', $response->getRequestArgs(), $response->getResponse());
+        throw new \Webguosai\HttpClient\Exception\RequestException('自定义异常错误', $response->getRequestArgs(), $response->getResponse());
     }
 } catch (\Webguosai\HttpClient\Exception\RequestException $e) {
     var_dump($e->getMessage()); // 错误内容

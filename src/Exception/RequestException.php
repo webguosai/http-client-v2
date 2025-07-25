@@ -4,6 +4,7 @@ namespace Webguosai\HttpClient\Exception;
 
 use RuntimeException;
 use Webguosai\HttpClient\Consts\Consts;
+use Webguosai\HttpClient\Contract\ResponseInterface;
 
 /**
  * 所有异常会继承此类，这是一个基类
@@ -15,10 +16,10 @@ class RequestException extends RuntimeException
     protected $requestArgs;
     protected $response;
 
-    public function __construct(string $message, array $requestArgs = [], string $response = '', int $httpStatusCode = 200, int $curlErrorCode = 0)
+    public function __construct(string $message, ResponseInterface $response, int $httpStatusCode = 200, int $curlErrorCode = 0)
     {
-        $this->requestArgs    = $requestArgs;
-        $this->response       = $response;
+        $this->requestArgs    = $response->getRequestArgs();
+        $this->response       = $response->getResponse();
         $this->curlErrorCode  = $curlErrorCode;
         $this->httpStatusCode = $httpStatusCode;
 
