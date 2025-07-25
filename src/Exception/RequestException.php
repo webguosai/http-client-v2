@@ -10,16 +10,19 @@ use Webguosai\HttpClient\Consts\Consts;
  */
 class RequestException extends RuntimeException
 {
-    protected $errorType;
+    protected $curlErrorCode;
+    protected $httpStatusCode;
     protected $requestArgs;
     protected $response;
 
-    public function __construct(int $code = 0, array $requestArgs = [], string $response = '', string $errorType = '')
+    public function __construct(string $message, array $requestArgs = [], string $response = '', int $httpStatusCode = 200, int $curlErrorCode = 0)
     {
-        $this->requestArgs = $requestArgs;
-        $this->response    = $response;
-        $this->errorType   = $errorType;
-        parent::__construct($this->getErrorMsg($code), $code);
+        $this->requestArgs    = $requestArgs;
+        $this->response       = $response;
+        $this->curlErrorCode  = $curlErrorCode;
+        $this->httpStatusCode = $httpStatusCode;
+
+        parent::__construct($message);
     }
 
     /**
@@ -48,31 +51,37 @@ class RequestException extends RuntimeException
     }
 
     /**
-     * 获取错误类型
+     * 获取curl错误码
+     * @return int
+     */
+    public function getCurlErrorCode(): int
+    {
+        return $this->curlErrorCode;
+    }
+
+    /**
+     * 获取http状态码
+     * @return int
+     */
+    public function getHttpStatusCode(): int
+    {
+        return $this->httpStatusCode;
+    }
+
+    /**
+     * 错误类型
      * @return string
      */
     public function getErrorType(): string
     {
-        return $this->errorType;
-    }
-
-    /**
-     * 获取错误内容
-     * @param int $code
-     * @return string
-     */
-    protected function getErrorMsg(int $code): string
-    {
-        $errorType = $this->getErrorType();
-        $text = '';
-        if ($errorType === 'curl' && $code !== 0) {
-            $text = 'curl错误：';
-        } else if ($errorType === 'http' && $code !== 200) {
-            $text = '响应的http状态错误：';
+        $type = '';
+        if ($this->curlErrorCode !== 0) {
+            $type = 'curl';
+        } else if ($this->httpStatusCode !== 200) {
+            $type = 'http';
         }
 
-        $message = Consts::CODE[$errorType][$code] ?? '';
-
-        return $text . "{$message} [{$code}]";
+        return $type;
     }
+
 }

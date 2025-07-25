@@ -128,13 +128,16 @@ $response = $http->get('http://www.baidu.com');
 /** @var $throw \Webguosai\HttpClient\Exception\RequestException */
 [$status, $throw] = $response->ok();
 if ($status) {
-    var_dump($response->getBody());
+    var_dump($response->getBody()); // body
     var_dump($response->json());
+    var_dump($response->xml());
 } else {
-    var_dump($throw->getMessage());
-    var_dump($throw->getErrorType());
-    var_dump($throw->getCode());
-    var_dump($e->getRequestArgs());
+    var_dump($throw->getMessage()); // 错误内容
+    var_dump($throw->getRequestArgs()); // 请求前的传参
+    var_dump($throw->getContext()); // 上下文 信息
+    var_dump($throw->getErrorType()); // 错误类型
+    var_dump($throw->getHttpStatusCode()); // http 状态码
+    var_dump($throw->getCurlErrorCode()); // curl 错误码
 }
 ```
 
@@ -144,11 +147,18 @@ if ($status) {
 try {
     $response->throw();
     var_dump($response->json());
+    
+    // 自定义错误
+    if ($response->getBody() !== 'hello world') {
+        throw new \Webguosai\HttpClient\Exception\RequestException('自定义错误', $response->getRequestArgs(), $response->getResponse());
+    }
 } catch (\Webguosai\HttpClient\Exception\RequestException $e) {
-    var_dump($e->getMessage());
-    // var_dump($e->getErrorType());
-    var_dump($e->getCode());
-    var_dump($e->getRequestArgs());
+    var_dump($e->getMessage()); // 错误内容
+    var_dump($e->getRequestArgs()); // 请求前的传参
+    var_dump($e->getContext()); // 上下文 信息
+    var_dump($e->getErrorType()); // 错误类型
+    var_dump($e->getHttpStatusCode()); // http 状态码
+    var_dump($e->getCurlErrorCode()); // curl 错误码
 }
 ```
 

@@ -138,12 +138,18 @@ class Response
 
     /**
      * curl=0、且http状态=200表示成功
+     * @param callable|null $callback 自定义异常处理
      * @return array
      */
-    public function ok(): array
+    public function ok(?callable $callback = null): array
     {
         try {
             $this->throw();
+
+            if (null !== $callback) {
+                call_user_func($callback, $this);
+            }
+
         } catch (RequestException $e) {
             return [false, $e];
         }
@@ -160,7 +166,7 @@ class Response
         /** curl **/
         $errorCode = $this->getCurlErrorCode();
         if ($errorCode !== 0) {
-            throw new CurlException($errorCode, $this->getRequestArgs(), $this->response);
+            throw new CurlException($errorCode, $this->getRequestArgs(), $this->getResponse());
         }
 
         /** http **/
@@ -173,22 +179,22 @@ class Response
         if ($level === 4) {
             // 4xx
             if ($statusCode === 401) {
-                throw new UnauthorizedException($statusCode, $this->getRequestArgs(), $this->response);
+                throw new UnauthorizedException($statusCode, $this->getRequestArgs(), $this->getResponse());
             }
             if ($statusCode === 404) {
-                throw new NotFoundException($statusCode, $this->getRequestArgs(), $this->response);
+                throw new NotFoundException($statusCode, $this->getRequestArgs(), $this->getResponse());
             }
             if ($statusCode === 429) {
-                throw new TooManyRequestsException($statusCode, $this->getRequestArgs(), $this->response);
+                throw new TooManyRequestsException($statusCode, $this->getRequestArgs(), $this->getResponse());
             }
-            throw new ClientException($statusCode, $this->getRequestArgs(), $this->response);
+            throw new ClientException($statusCode, $this->getRequestArgs(), $this->getResponse());
         } elseif ($level === 5) {
             // 5xx
-            throw new ServerException($statusCode, $this->getRequestArgs(), $this->response);
+            throw new ServerException($statusCode, $this->getRequestArgs(), $this->getResponse());
         }
 
         // other
-        throw new HttpException($statusCode, $this->getRequestArgs(), $this->response);
+        throw new HttpException($statusCode, $this->getRequestArgs(), $this->getResponse());
     }
 
     /**
