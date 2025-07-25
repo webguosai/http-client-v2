@@ -108,8 +108,8 @@ class HttpClient implements HttpClientInterface
 
         // url
         curl_setopt($ch, CURLOPT_URL, $url);
-        // 超时
-        curl_setopt($ch, CURLOPT_TIMEOUT, $this->options['timeout']);
+        // 超时 (最终都会转换为毫秒)
+        curl_setopt($ch, CURLOPT_TIMEOUT_MS, $this->options['timeout'] * 1000);
 
         // 代理
         if (!empty($this->options['proxy'])) {
