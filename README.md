@@ -23,7 +23,7 @@ composer require webguosai/http-client-v2 -vvv
 ```php
 $options = [
     //超时(单位秒，-1表示不超时)
-    'timeout'     => 3,
+    'timeout'     => 3.0,
 
     //代理ip
     'proxySocks5'   => true, // 使用 socks5 代理
@@ -55,7 +55,7 @@ $headers = [
     'cookie' => 'login=true'
 ];
 
-//所有方法
+// 请求方式
 $response = $http->request($url, $method, $data, $headers);
 
 $response = $http->get($url, $query, $headers);
