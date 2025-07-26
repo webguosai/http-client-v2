@@ -12,17 +12,18 @@ class HttpClient implements HttpClientInterface
     protected $requestHeaders = [];
 
     /** 配置 **/
-    public $options = [
-        // 超时
-        'timeout'       => 3,
+    protected $options = [
+        // 超时 (单位秒，-1表示不超时)
+        'timeout'       => 3.0,
 
-        // 代理
-        'proxySocks5'   => false, // 是否使用 socks5
-        'proxy'         => '', // 代理ip，如：0.0.0.0:8888
+        // 代理ip
+        // http：127.0.0.1:9527 或 http://127.0.0.1:9527
+        // https：https://127.0.0.1:9527
+        // socks5：socks5://127.0.0.1:9527
+        'proxy'         => '',
 
-        // 允许重定向及重定向次数
-        'redirects'     => false,
-        'maxRedirect'   => 5,
+        // 重定向 (-1表示无限制，默认不重定向)
+        'redirect'      => 0,
 
         // 保存cookie的文件路径
         'cookieJarFile' => '',
@@ -74,6 +75,28 @@ class HttpClient implements HttpClientInterface
     }
 
     /**
+     * 设置最大重定向次数
+     * @param int $redirect
+     * @return $this
+     */
+    public function redirect(int $redirect): self
+    {
+        $this->options['redirect'] = $redirect;
+        return $this;
+    }
+
+    /**
+     * 设置代理地址
+     * @param string $proxy
+     * @return $this
+     */
+    public function proxy(string $proxy): self
+    {
+        $this->options['proxy'] = $proxy;
+        return $this;
+    }
+
+    /**
      * 请求
      * @param string $url
      * @param string $method
@@ -104,19 +127,14 @@ class HttpClient implements HttpClientInterface
 
         // 代理
         if (!empty($this->options['proxy'])) {
-            if ($this->options['proxySocks5']) {
-                // SOCKS5
-                curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
-            }
             curl_setopt($ch, CURLOPT_PROXY, $this->options['proxy']);
         }
 
         // 重定向
-        if ($this->options['redirects']) {
+        if ($this->options['redirect'] === 0) {
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-
             // 最多重定向次数
-            curl_setopt($ch, CURLOPT_MAXREDIRS, $this->options['maxRedirect']);
+            curl_setopt($ch, CURLOPT_MAXREDIRS, $this->options['redirect']);
         }
 
         // cookie

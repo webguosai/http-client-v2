@@ -2,6 +2,8 @@
 
 require_once '../vendor/autoload.php';
 
+// $url = 'https://www.google.com';
+
 /** get **/
 $url    = 'https://httpbin.org/get?a=aaa&b=bbb';
 $method = 'GET';
@@ -24,9 +26,10 @@ $data   = ['a' => 111];
 // ]));
 
 $http = \Webguosai\HttpClient\HttpClient::factory([
-    'timeout' => 1.0,
+    'timeout' => 3.0,
+    // 'proxy' => 'socks5://127.0.0.1:9527'
     // 'proxy' => '127.0.0.1:9527'
-])->timeout(2.5);
+]);
 
 $response = $http->request(
     $url,

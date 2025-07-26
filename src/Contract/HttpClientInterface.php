@@ -14,6 +14,8 @@ use Webguosai\HttpClient\Response;
  * @method ResponseInterface head(string $url, string|array $data = [], string|array $headers = [])
  * @method ResponseInterface options(string $url, string|array $data = [], string|array $headers = [])
  * @method self timeout(int|float $timeout)
+ * @method self redirect(int $redirect)
+ * @method self proxy(string $proxy)
  */
 interface HttpClientInterface
 {

@@ -22,17 +22,18 @@ composer require webguosai/http-client-v2 -vvv
 ### 初始化
 ```php
 $options = [
-    //超时(单位秒，-1表示不超时)
-    'timeout'     => 3.0,
+    //超时 (单位秒，-1表示不超时)
+    'timeout' => 3.0,
 
-    //代理ip
-    'proxySocks5'   => true, // 使用 socks5 代理
-    'proxy'         => '0.0.0.0:8888', // 代理ip，如：0.0.0.0:8888
+    // 代理ip
+    // http：127.0.0.1:9527 或 http://127.0.0.1:9527
+    // https：https://127.0.0.1:9527
+    // socks5：socks5://127.0.0.1:9527
+    'proxy' => '',
 
-    //重定向、及最多重定向跳转次数
-    'redirects'   => false,
-    'maxRedirect' => 5,
-    
+    // 重定向 (-1表示：无限制，默认不重定向)
+    'redirect' => 0,
+
     //cookie自动保存路径
     'cookieJarFile' => 'cookie.txt',
 ];
@@ -46,7 +47,14 @@ $http = \Webguosai\HttpClient\HttpClient::factory([
 ])
 ```
 
+### 链式
+
+```php
+$http->timeout(5.5)->redirect(5)->proxy('socks5://127.0.0.1:9527');
+```
+
 ### 请求
+
 ```php
 $url = 'https://httpbin.org';
 $data = ['data' => '111', 'data2' => '222'];
@@ -117,22 +125,16 @@ Cookie: cookie=6666666';
 $response = $http->post($url, $data, $headers);
 ```
 
-
 ## 实操
+
 ```php
 $http = \Webguosai\HttpClient\HttpClient::factory([
     'timeout' => 3,
 ])
-$response = $http->get('http://www.baidu.com');
+$response = $http->get('https://www.baidu.com');
 
 /** @var $throw \Webguosai\HttpClient\Exception\RequestException */
 [$status, $throw] = $response->ok();
-// 自定义异常错误
-// [$status, $throw] = $response->ok(function (\Webguosai\HttpClient\Contract\ResponseInterface $response) {
-//     if ($response->getBody() !== 'hello world') {
-//         throw new \Webguosai\HttpClient\Exception\RequestException('自定义异常错误', $response);
-//     }
-// });
 if ($status) {
     var_dump($response->getBody()); // body
     var_dump($response->json());
@@ -148,6 +150,29 @@ if ($status) {
 ```
 
 ## 异常
+
+- ok
+
+```php
+// 自定义异常错误
+[$status, $throw] = $response->ok(function (\Webguosai\HttpClient\Contract\ResponseInterface $response) {
+    if ($response->getBody() !== 'hello world') {
+        throw new \Webguosai\HttpClient\Exception\RequestException('自定义异常错误', $response);
+    }
+});
+if ($status) {
+    var_dump($response->json());
+} else {
+    var_dump($throw->getMessage()); // 错误内容
+    var_dump($throw->getRequestArgs()); // 请求前的传参
+    var_dump($throw->getContext()); // 上下文 信息
+    var_dump($throw->getErrorType()); // 错误类型
+    var_dump($throw->getHttpStatusCode()); // http 状态码
+    var_dump($throw->getCurlErrorCode()); // curl 错误码
+}
+```
+
+- throw
 
 ```php
 try {
