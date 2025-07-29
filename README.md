@@ -31,7 +31,7 @@ $options = [
     // socks5：socks5://127.0.0.1:9527
     'proxy' => '',
 
-    // 重定向 (-1表示：无限制，默认不重定向)
+    // 重定向 (-1表示：无限制，默认0表示不重定向)
     'redirect' => 0,
 
     //cookie自动保存路径
@@ -181,7 +181,7 @@ try {
     
     // 自定义异常错误
     if ($response->getBody() !== 'hello world') {
-        throw new \Webguosai\HttpClient\Exception\RequestException('自定义异常错误', $response->getRequestArgs(), $response->getResponse());
+        throw new \Webguosai\HttpClient\Exception\RequestException('自定义异常错误', $response);
     }
 } catch (\Webguosai\HttpClient\Exception\RequestException $e) {
     var_dump($e->getMessage()); // 错误内容

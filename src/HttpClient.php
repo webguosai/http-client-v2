@@ -22,7 +22,7 @@ class HttpClient implements HttpClientInterface
         // socks5：socks5://127.0.0.1:9527
         'proxy'         => '',
 
-        // 重定向 (-1表示无限制，默认不重定向)
+        // 重定向 (-1表示：无限制，默认0表示不重定向)
         'redirect'      => 0,
 
         // 保存cookie的文件路径

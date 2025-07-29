@@ -74,7 +74,7 @@ if ($status) {
 //
 //     // 自定义错误
 //     if ($response->getBody() !== 'hello world') {
-//         throw new \Webguosai\HttpClient\Exception\RequestException('自定义错误', $response->getRequestArgs(), $response->getResponse());
+//         throw new \Webguosai\HttpClient\Exception\RequestException('自定义错误', $response);
 //     }
 // } catch (\Webguosai\HttpClient\Exception\RequestException $e) {
 //     dump($e->getMessage());
