@@ -113,7 +113,7 @@ class HttpClient implements HttpClientInterface
         $this->requestHeaders = [];
 
         // 根据 data 来设置对应的content-type请求头
-        $this->setContentTypeByData($data);
+        $this->setContentTypeByData($data, $method);
 
         // 处理 url 和 data
         [$url, $data] = $this->handleUrlData($url, $method, $data);
@@ -182,10 +182,16 @@ class HttpClient implements HttpClientInterface
     /**
      * 根据 data 判断使用哪种 content-type
      * @param mixed $data
+     * @param string $method
      * @return void
      */
-    protected function setContentTypeByData($data): void
+    protected function setContentTypeByData($data, string $method): void
     {
+        if ($method === 'GET') {
+            // GET 请求不设置 文档类型
+            return;
+        }
+
         // 根据data类型来设置请求的content-type
         if (is_string($data)) {
             if (!is_null(json_decode($data))) {
