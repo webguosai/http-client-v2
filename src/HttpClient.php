@@ -131,7 +131,7 @@ class HttpClient implements HttpClientInterface
         }
 
         // 重定向
-        if ($this->options['redirect'] === 0) {
+        if ($this->options['redirect'] !== 0) {
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
             // 最多重定向次数
             curl_setopt($ch, CURLOPT_MAXREDIRS, $this->options['redirect']);
